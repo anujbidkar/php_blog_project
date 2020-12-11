@@ -1,3 +1,9 @@
+<?php 
+include('db.php');
+?>
+<?php 
+ob_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -41,26 +47,23 @@
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Login Here</h1>
                                     </div>
-                                    <form class="user">
+                                        <form action="" method="POST">
                                         <div class="form-group">
-                                            <input type="email" class="form-control form-control-user"
+                                            <input required type="email" name="email" class="form-control form-control-user"
                                                 id="exampleInputEmail" aria-describedby="emailHelp"
                                                 placeholder="Enter Email Address...">
                                         </div>
                                         <div class="form-group">
-                                            <input type="password" class="form-control form-control-user"
-                                                id="exampleInputPassword" placeholder="Password">
+                                            <input required type="password" class="form-control form-control-user"
+                                                id="exampleInputPassword" name="password" placeholder="Password">
                                         </div>
-                                        <div class="form-group">
-                                            <div class="custom-control custom-checkbox small">
-                                                <input type="checkbox" class="custom-control-input" id="customCheck">
-                                                <label class="custom-control-label" for="customCheck">Remember
-                                                    Me</label>
-                                            </div>
-                                        </div>
-                                        <a href="index.html" class="btn btn-primary btn-user btn-block">
+                                       
+                                        <button name="login_btn" type="submit" class="btn btn-primary btn-user btn-block">
                                             Login
-                                        </a>
+                                        </button>
+                                        </form>
+
+                                        
                                         <hr>
                                         <!-- <a href="index.html" class="btn btn-google btn-user btn-block">
                                             <i class="fab fa-google fa-fw"></i> Login with Google
@@ -68,7 +71,41 @@
                                         <a href="index.html" class="btn btn-facebook btn-user btn-block">
                                             <i class="fab fa-facebook-f fa-fw"></i> Login with Facebook
                                         </a> -->
-                                    </form>
+
+                                    <?php
+                                        if(isset($_POST['login_btn']))
+                                        {
+                                            $user_email = $_POST['email'];
+                                            $user_password = $_POST['password'];
+
+
+                                            $query_login = "SELECT * FROM users WHERE user_email='$user_email' and user_password='$user_password' ";
+                                            $result = mysqli_query($connection,$query_login);
+
+                                            if($result)
+                                            {
+                                                $number_of_rows = mysqli_num_rows($result);
+
+
+                                                if($number_of_rows == 1)
+                                                {
+                                                    header("Location:dashboard.php");  //redirect 
+
+
+                                                }
+                                                else
+                                                {
+                                                    echo "Username and Password Invalid";
+                                                }
+
+                                            }
+                                            else
+                                            {
+                                                echo "error in query".mysqli_error($connection);
+                                            }
+                                        }
+                                        
+                                        ?>
                                     <!-- <hr>
                                     <div class="text-center">
                                         <a class="small" href="forgot-password.html">Forgot Password?</a>
